@@ -9,7 +9,7 @@ import authenticated from "../../middleware/authenticated.middleware";
 class UserController implements Controller {
   public path = "/users";
   public router = Router();
-  private UserService = new UserService();
+  private userService = new UserService();
 
   constructor() {
     this.initialiseRoutes();
@@ -36,7 +36,7 @@ class UserController implements Controller {
   ): Promise<Response | void> => {
     try {
       const { name, email, password } = req.body;
-      const token = await this.UserService.register(
+      const token = await this.userService.register(
         name,
         email,
         password,
@@ -56,7 +56,7 @@ class UserController implements Controller {
   ): Promise<Response | void> => {
     try {
       const { email, password } = req.body;
-      const token = await this.UserService.login(email, password);
+      const token = await this.userService.login(email, password);
 
       res.status(200).json({ token });
     } catch (error: any) {
