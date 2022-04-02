@@ -20,18 +20,14 @@ class UserService {
   }
 
   public async login(email: string, password: string): Promise<string | Error> {
-    try {
-      const user = await this.user.findOne({ email });
-      if (!user) {
-        throw new Error("Unable to find user with that email address");
-      }
-      if (await user.isValidPassword(password)) {
-        return token.createToken(user);
-      } else {
-        return new Error("Wrong credentials given");
-      }
-    } catch (error) {
-      throw new Error("Unable to login user");
+    const user = await this.user.findOne({ email });
+    if (!user) {
+      throw new Error("Unable to find user with that email address");
+    }
+    if (await user.isValidPassword(password)) {
+      return token.createToken(user);
+    } else {
+      return new Error("Wrong credentials given");
     }
   }
 }

@@ -5,6 +5,8 @@ import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "./user.validation";
 import UserService from "./user.service";
 import authenticated from "../../middleware/authenticated.middleware";
+import jwt from "jsonwebtoken";
+import { type } from "os";
 
 class UserController implements Controller {
   public path = "/users";
@@ -57,7 +59,9 @@ class UserController implements Controller {
     try {
       const { email, password } = req.body;
       const token = await this.userService.login(email, password);
-
+      if (typeof token != "string") {
+        return next(new HttpException(400, token.message));
+      }
       res.status(200).json({ token });
     } catch (error: any) {
       next(new HttpException(400, error.message));
