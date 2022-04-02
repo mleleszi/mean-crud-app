@@ -41,6 +41,14 @@ class ProductService {
       throw new Error("Unable to fetch products!");
     }
   }
+
+  public async findOne(id: string): Promise<Product> {
+    const product = await this.product.findById(id);
+    if (!product) {
+      throw new Error("Unable fetch product!");
+    }
+    return product;
+  }
 }
 
 export default ProductService;

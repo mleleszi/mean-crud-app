@@ -23,6 +23,7 @@ class ProductController implements Controller {
       this.create
     );
     this.router.get(`${this.path}`, authenticated, this.findAll);
+    this.router.get(`${this.path}/:id`, authenticated, this.findById);
   }
 
   private create = async (
@@ -57,6 +58,19 @@ class ProductController implements Controller {
       res.status(200).json({ products });
     } catch (error) {
       next(new HttpException(400, "Cannot fetch products"));
+    }
+  };
+
+  private findById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const product = await this.productService.findOne(req.params.id);
+      res.status(200).json({ product });
+    } catch {
+      return next(new HttpException(404, "Product not found"));
     }
   };
 }
