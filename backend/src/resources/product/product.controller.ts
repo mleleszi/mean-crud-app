@@ -22,6 +22,7 @@ class ProductController implements Controller {
       validationMiddleware(validate.create),
       this.create
     );
+    this.router.get(`${this.path}`, authenticated, this.findAll);
   }
 
   private create = async (
@@ -31,7 +32,7 @@ class ProductController implements Controller {
   ): Promise<Response | void> => {
     try {
       const { name, description, price, stock } = req.body;
-      const product = await this.productService.create(
+      const product = await this.productService.save(
         name,
         description,
         price,
@@ -40,6 +41,22 @@ class ProductController implements Controller {
       res.status(201).json({ product });
     } catch (error) {
       next(new HttpException(400, "Cannot create product"));
+    }
+  };
+
+  private findAll = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const page = Number(req.query.page);
+      const size = Number(req.query.size);
+
+      const products = await this.productService.findAll(page, size);
+      res.status(200).json({ products });
+    } catch (error) {
+      next(new HttpException(400, "Cannot fetch products"));
     }
   };
 }
