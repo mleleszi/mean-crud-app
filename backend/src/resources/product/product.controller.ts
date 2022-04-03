@@ -5,6 +5,8 @@ import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "./product.validation";
 import authenticated from "../../middleware/authenticated.middleware";
 import ProductService from "./product.service";
+import ProductModel from "./product.model";
+import ProductSchema from "./product.model";
 
 class ProductController implements Controller {
   public path = "/product";
@@ -24,6 +26,8 @@ class ProductController implements Controller {
     );
     this.router.get(`${this.path}`, authenticated, this.findAll);
     this.router.get(`${this.path}/:id`, authenticated, this.findById);
+    this.router.delete(`${this.path}/:id`, authenticated, this.deleteOne);
+    this.router.put(`${this.path}/:id`, authenticated, this.updateOne);
   }
 
   private create = async (
@@ -72,6 +76,51 @@ class ProductController implements Controller {
     } catch {
       return next(new HttpException(404, "Product not found"));
     }
+  };
+
+  private deleteOne = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    ProductModel.deleteOne({ _id: req.params.id }).then(
+      (result) => {
+        if (result.deletedCount > 0) {
+          res.status(204).send({ message: "deleted" });
+        } else {
+          next(new HttpException(404, "Product not found"));
+        }
+      },
+      () => {
+        next(new HttpException(404, "Product not found"));
+      }
+    );
+  };
+
+  private updateOne = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    const product = new ProductModel({
+      _id: req.body.id,
+      name: req.body.name,
+      description: req.body.description,
+      stock: req.body.stock,
+      price: req.body.price,
+    });
+
+    ProductModel.updateOne({ _id: req.params.id }, product)
+      .then((result) => {
+        if (result.matchedCount > 0) {
+          res.status(200).send("updated");
+        } else {
+          next(new HttpException(404, "Product not found"));
+        }
+      })
+      .catch(() => {
+        next(new HttpException(404, "Product not found"));
+      });
   };
 }
 
