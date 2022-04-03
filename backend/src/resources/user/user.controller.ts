@@ -5,6 +5,7 @@ import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "./user.validation";
 import UserService from "./user.service";
 import authenticated from "../../middleware/authenticated.middleware";
+import UserModel from "./user.model";
 import jwt from "jsonwebtoken";
 import { type } from "os";
 
@@ -37,13 +38,8 @@ class UserController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const { name, email, password } = req.body;
-      const token = await this.userService.register(
-        name,
-        email,
-        password,
-        "user"
-      );
+      const { email, password } = req.body;
+      const token = await this.userService.register(email, password, "user");
 
       res.status(201).json({ token });
     } catch (error: any) {
@@ -62,7 +58,10 @@ class UserController implements Controller {
       if (typeof token != "string") {
         return next(new HttpException(400, token.message));
       }
-      res.status(200).json({ token });
+      // QUICK FIX, CHANGE IT ASAP!!!!
+      const user = await UserModel.findOne({ email });
+
+      res.status(200).json({ token, expiresIn: "3600", userId: user?._id });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
