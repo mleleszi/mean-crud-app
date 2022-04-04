@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { ProductListComponent } from './product/product-list/product-list.component';
 import { ProductCreateComponent } from './product/product-create/product-create.component';
 import { MatTableModule } from '@angular/material/table';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { MatTableModule } from '@angular/material/table';
     ErrorComponent,
     ProductListComponent,
     ProductCreateComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,6 @@ import { MatTableModule } from '@angular/material/table';
     BrowserAnimationsModule,
     HttpClientModule,
     AngularMaterialModule,
-    MatTableModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
