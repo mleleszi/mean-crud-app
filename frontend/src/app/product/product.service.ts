@@ -41,7 +41,28 @@ export class ProductService {
       });
   }
 
-  getProduct() {
-    //return this.http.get<{}>.
+  getProduct(id: string) {
+    return this.http.get<Product>('http://localhost:8080/api/product/' + id);
+  }
+
+  createProduct(product: Product) {
+    product._id = null;
+    this.http
+      .post('http://localhost:8080/api/product/', product)
+      .subscribe((res) => {
+        this.router.navigate(['/']);
+      });
+  }
+
+  updateProduct(product: Product) {
+    this.http
+      .put('http://localhost:8080/api/product/' + product._id, product)
+      .subscribe((res) => {
+        this.router.navigate(['/']);
+      });
+  }
+
+  deleteProduct(id: string) {
+    return this.http.delete('http://localhost:8080/api/product/' + id);
   }
 }

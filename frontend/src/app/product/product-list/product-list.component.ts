@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ProductService } from '../product.service';
 import { AuthService } from '../../auth/auth.service';
 import { Subscription } from 'rxjs';
@@ -9,11 +9,18 @@ import Product from '../product.model';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
   products: Product[];
   isLoading = false;
   userIsAuthenticated = false;
-  displayedColumns: string[] = ['id', 'name', 'description', 'stock', 'price'];
+  displayedColumns: string[] = [
+    'id',
+    'name',
+    'description',
+    'stock',
+    'price',
+    'operations',
+  ];
   private productSubscription: Subscription;
   private authListenerSubscription: Subscription;
 
@@ -37,5 +44,17 @@ export class ProductListComponent implements OnInit {
       .subscribe((isAuthenticated) => {
         this.userIsAuthenticated = isAuthenticated;
       });
+  }
+
+  onDelete(productId: string) {
+    this.isLoading = true;
+    this.productService.deleteProduct(productId).subscribe(() => {
+      this.productService.getProducts();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.productSubscription.unsubscribe();
+    this.authListenerSubscription.unsubscribe();
   }
 }
