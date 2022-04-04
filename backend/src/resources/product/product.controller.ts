@@ -110,15 +110,22 @@ class ProductController implements Controller {
       price: req.body.price,
     });
 
-    ProductModel.updateOne({ _id: req.params.id }, product)
+    const product2 = {
+      name: req.body.name,
+      description: req.body.description,
+      stock: req.body.stock,
+      price: req.body.price,
+    };
+
+    ProductModel.updateOne({ _id: req.params.id }, product2)
       .then((result) => {
         if (result.matchedCount > 0) {
-          res.status(200).send("updated");
+          res.status(204).json();
         } else {
           next(new HttpException(404, "Product not found"));
         }
       })
-      .catch(() => {
+      .catch((err) => {
         next(new HttpException(404, "Product not found"));
       });
   };
