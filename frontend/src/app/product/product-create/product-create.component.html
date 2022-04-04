@@ -1,1 +1,53 @@
-<p>product-create works!</p>
+<mat-card>
+  <mat-spinner *ngIf="isLoading"> </mat-spinner>
+  <form (submit)="onSavePost(productForm)" #productForm="ngForm" *ngIf="!isLoading">
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        name="name"
+        [ngModel]="product?.name"
+        required
+        placeholder="Product Name"
+        #title="ngModel"
+      />
+      <mat-error *ngIf="title.invalid">Please enter a name</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <textarea
+        matInput
+        rows="4"
+        name="description"
+        [ngModel]="product?.description"
+        required
+        placeholder="Product Description"
+        #content="ngModel"
+      ></textarea>
+      <mat-error *ngIf="content.invalid">Please enter a description</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        type="number"
+        name="stock"
+        [ngModel]="product?.stock"
+        required
+        placeholder="Product Stock"
+        #title="ngModel"
+      />
+      <mat-error *ngIf="title.invalid">Please enter a number</mat-error>
+    </mat-form-field><mat-form-field>
+    <input
+      matInput
+      type="number"
+      name="price"
+      [ngModel]="product?.price"
+      required
+      placeholder="Product Price"
+      #title="ngModel"
+    />
+    <mat-error *ngIf="title.invalid">Please enter a number</mat-error>
+  </mat-form-field>
+    <button mat-raised-button color="accent" type="submit" [disabled]="productForm.form.invalid">Save Post</button>
+  </form>
+</mat-card>

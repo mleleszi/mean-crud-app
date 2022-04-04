@@ -42,7 +42,9 @@ export class ProductService {
   }
 
   getProduct(id: string) {
-    return this.http.get<Product>('http://localhost:8080/api/product/' + id);
+    return this.http.get<{ product: Product }>(
+      'http://localhost:8080/api/product/' + id
+    );
   }
 
   createProduct(product: Product) {

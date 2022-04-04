@@ -1,5 +1,8 @@
-<mat-spinner *ngIf="isLoading"></mat-spinner>
-<table mat-table [dataSource]="products" class="mat-elevation-z8">
+<mat-spinner *ngIf="isLoading && userIsAuthenticated"></mat-spinner>
+<mat-card *ngIf="!userIsAuthenticated">
+  <h1 class="center">Please log in!</h1>
+</mat-card>
+<table mat-table [dataSource]="products" class="mat-elevation-z8" *ngIf="!isLoading && userIsAuthenticated">
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef> No. </th>
     <td mat-cell *matCellDef="let product"> {{product._id}} </td>
@@ -27,8 +30,10 @@
   </ng-container>
   <ng-container matColumnDef="operations">
     <th mat-header-cell *matHeaderCellDef> </th>
-    <td mat-cell *matCellDef="let product">
-      <mat-icon aria-hidden="false" aria-label="Example home icon" color="accent" (click)="onDelete(product._id)">delete</mat-icon>
+    <td align="right" mat-cell *matCellDef="let product">
+      <mat-icon aria-hidden="false"  color="primary" [routerLink]="['/edit', product._id]">edit</mat-icon>
+      <span class="spacer"></span>
+      <mat-icon aria-hidden="false"  color="accent" (click)="onDelete(product._id)">delete</mat-icon>
     </td>
   </ng-container>
 
