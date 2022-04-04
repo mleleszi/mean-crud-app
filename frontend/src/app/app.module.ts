@@ -13,9 +13,19 @@ import { ErrorInterceptor } from './error.interceptor';
 import { AngularMaterialModule } from './angular-material.module';
 import { ErrorComponent } from './error/error.component';
 import { FormsModule } from '@angular/forms';
+import { ProductListComponent } from './product/product-list/product-list.component';
+import { ProductCreateComponent } from './product/product-create/product-create.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, SignupComponent, ErrorComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    SignupComponent,
+    ErrorComponent,
+    ProductListComponent,
+    ProductCreateComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -23,6 +33,7 @@ import { FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     HttpClientModule,
     AngularMaterialModule,
+    MatTableModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
