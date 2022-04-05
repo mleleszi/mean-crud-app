@@ -14,7 +14,7 @@ class UserService {
       const accessToken = token.createToken(user);
       return accessToken;
     } catch (error) {
-      throw new Error("Unable to create user");
+      throw new Error("Unable to create user, email already taken!");
     }
   }
 

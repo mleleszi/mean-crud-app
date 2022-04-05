@@ -13,7 +13,7 @@ const authenticatedMiddleware = async (
   const bearer = req.headers.authorization;
 
   if (!bearer || !bearer.startsWith("Bearer ")) {
-    return next(new HttpException(401, "Unauthorised"));
+    return next(new HttpException(401, "Unauthorised, please log in"));
   }
 
   const accessToken = bearer.split("Bearer ")[1].trim();
@@ -23,7 +23,7 @@ const authenticatedMiddleware = async (
       accessToken
     );
     if (payLoad instanceof jwt.JsonWebTokenError) {
-      return next(new HttpException(401, "Unauthorised"));
+      return next(new HttpException(401, "Unauthorised, please log in"));
     }
 
     const user = await UserModel.findById(payLoad.id)
@@ -31,14 +31,14 @@ const authenticatedMiddleware = async (
       .exec();
 
     if (!user) {
-      return next(new HttpException(401, "Unauthorised"));
+      return next(new HttpException(401, "Unauthorised, please log in"));
     }
 
     req.user = user;
 
     return next();
   } catch (error) {
-    return next(new HttpException(401, "Unauthorised"));
+    return next(new HttpException(401, "Unauthorised, please log in"));
   }
 };
 
